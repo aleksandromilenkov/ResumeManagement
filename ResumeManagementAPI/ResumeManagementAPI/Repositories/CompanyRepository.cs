@@ -69,7 +69,7 @@ namespace ResumeManagementAPI.Repositories
         {
             try
             {
-                return await _context.Companies.FindAsync(id);
+                return await _context.Companies.Include(c=>c.Jobs).FirstOrDefaultAsync(j=> j.Id == id);
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace ResumeManagementAPI.Repositories
         {
             try
             {
-                return await _context.Companies.ToListAsync();
+                return await _context.Companies.Include(c => c.Jobs).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace ResumeManagementAPI.Repositories
         {
             try
             {
-                return await _context.Companies.FirstOrDefaultAsync(predicate);
+                return await _context.Companies.Include(c => c.Jobs).FirstOrDefaultAsync(predicate);
             }
             catch (Exception ex)
             {

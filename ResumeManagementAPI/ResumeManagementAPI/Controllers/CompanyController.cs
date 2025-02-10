@@ -47,15 +47,9 @@ namespace ResumeManagementAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            // Convert the string to the corresponding enum value
-            if (!Enum.TryParse(companyCreateDTO.Size, out SizeEnum size))
-            {
-                return BadRequest(new { message = "Invalid size value. It must be 'Small', 'Medium', or 'Large'." });
-            }
 
             // Map the DTO to the Company entity
             var company = _mapper.Map<Company>(companyCreateDTO);
-            company.Size = size; // Assign the correct enum value after conversion
             var response = await _companyRepository.CreateAsync(company);
 
             if (response.Flag)
@@ -70,18 +64,14 @@ namespace ResumeManagementAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             var existingCompany = await _companyRepository.FindByIdAsync(id);
             if (existingCompany == null)
                 return NotFound(new { message = "Company not found." });
 
-            if (!Enum.TryParse(companyDTO.Size, out SizeEnum size))
-            {
-                return BadRequest(new { message = "Invalid size value. It must be 'Small', 'Medium', or 'Large'." });
-            }
-
             companyDTO.Id = id; // Ensure the ID remains the same
             var company = _mapper.Map<Company>(companyDTO);
-            company.Size = size; // Assign correct enum value after conversion
+
             var response = await _companyRepository.UpdateAsync(company);
 
             if (response.Flag)

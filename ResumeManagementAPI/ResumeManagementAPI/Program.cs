@@ -1,6 +1,10 @@
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ResumeManagementAPI.Data;
+using ResumeManagementAPI.Interface;
 using ResumeManagementAPI.Profiles;
+using ResumeManagementAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +13,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServe
     builder.Configuration.GetConnectionString("resumeManagementConnection"),
     sqlServerOption => sqlServerOption.EnableRetryOnFailure()));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore // Prevent circular references
+    )
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 
 

@@ -46,20 +46,14 @@ namespace ResumeManagementAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            // Convert the string to the corresponding enum value
-            if (!Enum.TryParse(jobCreateDTO.Level, out LevelEnum level))
-            {
-                return BadRequest(new { message = "Invalid level value. It must be 'Junior', 'Mid', or 'Senior'." });
-            }
 
             // Map the DTO to the Job entity
             var job = _mapper.Map<Job>(jobCreateDTO);
-            job.Level = level; // Assign the correct enum value after conversion
             var response = await _jobRepository.CreateAsync(job);
-            if (!response.Flag)
-                return BadRequest(new { message = response.Message });
+            if (response.Flag)
+                return Ok(response);
 
-            return CreatedAtAction(nameof(GetById), new { id = job.Id }, job);
+            return BadRequest(new { message = response.Message });
         }
 
         // PUT: api/job/{id}
@@ -72,19 +66,14 @@ namespace ResumeManagementAPI.Controllers
             if (existingJob == null)
                 return NotFound(new { message = "Job not found." });
 
-            if (!Enum.TryParse(jobDTO.Level, out LevelEnum level))
-            {
-                return BadRequest(new { message = "Invalid level value. It must be 'Junior', 'Mid', or 'Senior'." });
-            }
 
             jobDTO.Id = id; // Ensure the ID remains the same
             var job = _mapper.Map<Job>(jobDTO);
-            job.Level = level; // Assign correct enum value after conversion
             var response = await _jobRepository.UpdateAsync(job);
-            if (!response.Flag)
-                return BadRequest(new { message = response.Message });
+            if (response.Flag)
+                return Ok(response);
 
-            return Ok(new { message = "Job updated successfully." });
+            return BadRequest(new { message = response.Message });
         }
 
         // DELETE: api/job/{id}
@@ -96,10 +85,10 @@ namespace ResumeManagementAPI.Controllers
                 return NotFound(new { message = "Job not found." });
 
             var response = await _jobRepository.DeleteAsync(job);
-            if (!response.Flag)
-                return BadRequest(new { message = response.Message });
+            if (response.Flag)
+                return Ok(response);
 
-            return Ok(new { message = "Job deleted successfully." });
+            return BadRequest(new { message = response.Message });
         }
     }
 }

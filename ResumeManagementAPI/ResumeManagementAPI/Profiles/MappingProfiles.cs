@@ -12,11 +12,10 @@ namespace ResumeManagementAPI.Profiles
         {
             CreateMap<Candidate, CandidateDTO>().ReverseMap();
             CreateMap<Candidate, CandidateCreateDTO>().ReverseMap();
-            CreateMap<Company, CompanyDTO>()
-                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size.ToString()));
+            CreateMap<Company, CompanyDTO>().ReverseMap();
             CreateMap<Company, CompanyCreateDTO>().ReverseMap();
-            CreateMap<Job, JobDTO>()
-                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Level.ToString()));
+            CreateMap<Job, JobDTO>().ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.Name));
+            CreateMap<JobDTO, Job>();
             CreateMap<Job, JobCreateDTO>().ReverseMap();
 
 

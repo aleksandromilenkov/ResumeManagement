@@ -8,6 +8,7 @@ namespace ResumeManagementAPI.DTOs.JobDTOs
     {
         public string Title { get; set; }
         public int CompanyId { get; set; }
-        public string Level { get; set; }
+        public string CompanyName { get; set; }
+        public LevelEnum Level { get; set; }
     }
 }
