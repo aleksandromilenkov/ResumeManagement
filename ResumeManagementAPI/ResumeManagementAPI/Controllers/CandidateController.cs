@@ -86,8 +86,8 @@ namespace ResumeManagementAPI.Controllers
         }
 
         // PUT: api/candidate/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] CandidateDTO candidateDTO)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] CandidateUpdateDTO candidateUpdateDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -96,9 +96,49 @@ namespace ResumeManagementAPI.Controllers
             if (existingCandidate == null)
                 return NotFound(new { message = "Candidate not found." });
 
-            candidateDTO.Id = id; // Ensure the ID remains the same
-            var candidate = _mapper.Map<Candidate>(candidateDTO);
-            var response = await _candidateRepository.UpdateAsync(candidate);
+            var resume = candidateUpdateDTO.Resume;
+            if (resume != null)
+            {
+                var fiveMB = 5 * 1024 * 1024;
+                var pdfMimeType = "application/pdf";
+
+                if (resume.Length > fiveMB || resume.ContentType != pdfMimeType)
+                {
+                    return BadRequest("Invalid file type or size.");
+                }
+
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "documents", "resumes");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Delete old file if exists
+                if (!string.IsNullOrEmpty(existingCandidate.ResumeUrl))
+                {
+                    var oldFilePath = Path.Combine(directoryPath, existingCandidate.ResumeUrl);
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+                // Save new file
+                var resumeURL = Guid.NewGuid().ToString() + ".pdf";
+                var filePath = Path.Combine(directoryPath, resumeURL);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await resume.CopyToAsync(stream);
+                }
+
+                existingCandidate.ResumeUrl = resumeURL;
+            }
+
+            candidateUpdateDTO.Id = id; // Ensure the ID remains the same
+            _mapper.Map(candidateUpdateDTO, existingCandidate); // Updates the existing entity
+            var response = await _candidateRepository.UpdateAsync(existingCandidate);
+
+
 
             if (response.Flag)
                 return Ok(response);
@@ -123,7 +163,7 @@ namespace ResumeManagementAPI.Controllers
         }
 
         // Download Resume PDF
-        [HttpGet("download/{resumeFileName:string}")]
+        [HttpGet("download/{resumeFileName}")]
         public IActionResult DownloadToPdfFile(string resumeFileName)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "documents", "resumes", resumeFileName);
