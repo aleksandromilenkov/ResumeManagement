@@ -121,5 +121,21 @@ namespace ResumeManagementAPI.Controllers
 
             return BadRequest(new { message = response.Message });
         }
+
+        // Download Resume PDF
+        [HttpGet("download/{resumeFileName:string}")]
+        public IActionResult DownloadToPdfFile(string resumeFileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "documents", "resumes", resumeFileName);
+            
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File Not Found.");
+            }
+
+            var pdfBytes = System.IO.File.ReadAllBytes(filePath);
+            var file = File(pdfBytes, "application/pdf", resumeFileName);
+            return file;
+        }
     }
 }

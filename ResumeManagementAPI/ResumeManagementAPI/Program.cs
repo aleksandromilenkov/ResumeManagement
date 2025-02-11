@@ -32,6 +32,14 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+app.UseCors(options =>
+{
+    options
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin();
+});
+
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
