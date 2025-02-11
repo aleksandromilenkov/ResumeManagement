@@ -41,17 +41,42 @@ namespace ResumeManagementAPI.Controllers
 
         // POST: api/candidate
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CandidateCreateDTO candidateCreateDTO)
+        public async Task<IActionResult> Create([FromForm] CandidateCreateDTO candidateCreateDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Check if the email already exists
+            var resume = candidateCreateDTO.Resume;
+
+            // First -> Save File to the Server
+            // Then -> Save the URL on the Entity
+            var fiveMB = 5 * 1024 * 1024;
+            var pdfMimeType = "application/pdf";
+
+            if(resume.Length > fiveMB || resume.ContentType != pdfMimeType)
+            {
+                return BadRequest("Not valid file type");
+            }
+
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "documents", "resumes");
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            var resumeURL = Guid.NewGuid().ToString() + ".pdf";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "documents", "resumes", resumeURL);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await resume.CopyToAsync(stream);
+            }
+            
             var existingCandidate = await _candidateRepository.GetByAsync(c => c.Email == candidateCreateDTO.Email);
             if (existingCandidate != null)
                 return BadRequest(new { message = "Candidate with this email already exists." });
 
             var candidate = _mapper.Map<Candidate>(candidateCreateDTO);
+            candidate.ResumeUrl = resumeURL;
             var response = await _candidateRepository.CreateAsync(candidate);
 
             if (response.Flag)
@@ -62,7 +87,7 @@ namespace ResumeManagementAPI.Controllers
 
         // PUT: api/candidate/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CandidateDTO candidateDTO)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] CandidateDTO candidateDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
