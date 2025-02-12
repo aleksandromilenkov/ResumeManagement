@@ -19,9 +19,6 @@ namespace ResumeManagementAPI.Profiles
             CreateMap<Job, JobDTO>().ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.Name));
             CreateMap<JobDTO, Job>();
             CreateMap<Job, JobCreateDTO>().ReverseMap();
-
-
-
         }
     }
 }
