@@ -49,6 +49,13 @@ namespace ResumeManagementAPI.Repositories
         {
             try
             {
+                var jobs = await _context.Jobs.Where(j => j.CompanyId == entity.Id).ToListAsync();
+                foreach (var job in jobs)
+                {
+                    var candidates = await _context.Candidates.Where(c => c.JobId == job.Id).ToListAsync();
+                    _context.Candidates.RemoveRange(candidates);
+                    _context.Jobs.Remove(job);
+                }
                 _context.Companies.Remove(entity);
                 var resp = await _context.SaveChangesAsync();
 

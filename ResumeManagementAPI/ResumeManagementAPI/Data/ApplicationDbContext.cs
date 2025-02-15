@@ -19,12 +19,14 @@ namespace ResumeManagementAPI.Data
             modelBuilder.Entity<Job>()
                 .HasOne(job => job.Company)
                 .WithMany(company => company.Jobs)
-                .HasForeignKey(job => job.CompanyId);
+                .HasForeignKey(job => job.CompanyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Candidate>()
                 .HasOne(candidate=> candidate.Job)
                 .WithMany(job=> job.Candidates)
-                .HasForeignKey(candidate=> candidate.JobId);
+                .HasForeignKey(candidate=> candidate.JobId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Job>()
                 .Property(job => job.Level)
