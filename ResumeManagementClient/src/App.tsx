@@ -6,6 +6,7 @@ import Spinner from "./utils/Spinner";
 
 // Imports with lazy loading
 const Home = lazy(()=> import("./pages/home/HomePage"));
+const CompaniesPage = lazy(()=> import("./pages/companies/CompaniesPage"));
 
 function App() {
   const { darkMode } = useTheme();
@@ -18,6 +19,9 @@ function App() {
           <Routes>
             <Route index element={<Navigate replace to="home" />} />
             <Route path="/home" element={<Home/>}/>
+            <Route path="/companies">
+              <Route index element={<CompaniesPage/>}/>
+            </Route>
           </Routes>
         </Suspense>
       </div>
