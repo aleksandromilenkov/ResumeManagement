@@ -1,3 +1,77 @@
+@import "../../mixins";
+
 .navbar{
+    @include d-flex(row, space-between, center);
+    color: #fff;
+    background-color: rgb(52, 51, 51);
+    width: 100%;
+    height:60px;
+    padding: 0 2rem;
+
+    .brand{
+        flex:1;
+    }
+
+    .menu{
+        ul{
+            @include d-flex(row, space-between, center);
+            gap:1rem;
+            li{
+                a{
+                    color:#fff;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .hamburger{
+        display: none;
+        cursor: pointer;
+    }
+
+    .toggle{
+        cursor: pointer;
+        margin-left: 1rem;
+        svg{
+            color: var(--blue);
+        }
+    }
+}
+
+@media (max-width:600px) {
     
+.navbar{
+    padding: 0 1rem;
+
+    .menu{
+        @include d-flex(column, flex-start, center);
+        gap:1rem;
+        color:#fff;
+        background-color: rgb(52, 51, 51);
+        width:240px;
+        margin-top: 60px;
+        height: 100vh;
+        position:fixed;
+        top:0;
+        left:0;
+        z-index:100;
+        transition: all 300ms ease-in-out;
+        ul{
+            @include d-flex(column, flex-start, center);
+            li{
+                a{
+                    color:#fff;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .menu.closed{
+        left:-240px;
+    }
+    .hamburger{
+        display: block;
+    }
+}
 }

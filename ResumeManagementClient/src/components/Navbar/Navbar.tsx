@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { Menu, LightMode, DarkMode } from "@mui/icons-material";
@@ -25,22 +25,24 @@ const links = [
 ];
 const Navbar = (props: Props) => {
   const {darkMode, toggleDarkMode} = useTheme();
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const closeMenu = () => setMenuIsOpen(prev=>!prev);
   return (
     <div className="navbar">
       <div className="brand">
         <span>Resume Management</span>
       </div>
-      <div className="menu">
+      <div className={menuIsOpen ? "menu" : "menu closed"}>
         <ul>
           {links.map((item, idx) => (
             <li key={idx}>
-              <Link to={item.href}>{item.label}</Link>
+              <Link to={item.href} onClick={closeMenu}>{item.label}</Link>
             </li>
           ))}
         </ul>
       </div>
       <div className="hamburger">
-          <Menu />
+          <Menu  onClick={closeMenu}/>
       </div>
       <div className="toggle">
         <ToggleButton
