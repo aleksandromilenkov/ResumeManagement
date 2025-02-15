@@ -26,7 +26,8 @@ namespace ResumeManagementAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var jobs = await _jobRepository.GetAllAsync();
-            return Ok(jobs);
+            var jobDTOs = _mapper.Map<IEnumerable<JobDTO>>(jobs);
+            return Ok(jobDTOs);
         }
 
         // GET: api/job/{id}
@@ -36,8 +37,8 @@ namespace ResumeManagementAPI.Controllers
             var job = await _jobRepository.FindByIdAsync(id);
             if (job == null)
                 return NotFound(new { message = "Job not found." });
-
-            return Ok(job);
+            var jobDTO = _mapper.Map<JobDTO>(job);
+            return Ok(jobDTO);
         }
 
         // POST: api/job

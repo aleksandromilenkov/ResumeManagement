@@ -27,7 +27,8 @@ namespace ResumeManagementAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var companies = await _companyRepository.GetAllAsync();
-            return Ok(companies);
+            var companiesDTOs = _mapper.Map<IEnumerable<CompanyDTO>>(companies);
+            return Ok(companiesDTOs);
         }
 
         // GET: api/company/{id}
@@ -37,8 +38,8 @@ namespace ResumeManagementAPI.Controllers
             var company = await _companyRepository.FindByIdAsync(id);
             if (company == null)
                 return NotFound(new { message = "Company not found." });
-
-            return Ok(company);
+            var companyDTO = _mapper.Map<CompanyDTO>(company);
+            return Ok(companyDTO);
         }
 
         // POST: api/company

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 using ResumeManagementAPI.DTOs;
 using ResumeManagementAPI.DTOs.CandidateDTOs;
 using ResumeManagementAPI.Interface;
@@ -25,7 +26,8 @@ namespace ResumeManagementAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var candidates = await _candidateRepository.GetAllAsync();
-            return Ok(candidates);
+            var candidatesDTOs = _mapper.Map<IEnumerable<CandidateDTO>>(candidates);
+            return Ok(candidatesDTOs);
         }
 
         // GET: api/candidate/{id}
@@ -35,8 +37,8 @@ namespace ResumeManagementAPI.Controllers
             var candidate = await _candidateRepository.FindByIdAsync(id);
             if (candidate == null)
                 return NotFound(new { message = "Candidate not found." });
-
-            return Ok(candidate);
+            var candidateDTO = _mapper.Map<CandidateDTO>(candidate);
+            return Ok(candidateDTO);
         }
 
         // POST: api/candidate
