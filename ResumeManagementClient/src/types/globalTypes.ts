@@ -6,3 +6,13 @@ export interface ICompany{
     updatedAt:string,
     isActive:boolean,
 };
+
+export interface ICreateCompanyDTO{
+    name: string,
+    size: string,
+};
+
+export type createCompanyError ={
+    property: string,
+    message: string,
+}
