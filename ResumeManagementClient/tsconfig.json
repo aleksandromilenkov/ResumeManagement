@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
+      "module": "esnext",
       "target": "ES6",
+      "allowSyntheticDefaultImports": true,
       "jsx": "react",
       "moduleResolution": "node",
       "strict": true,
