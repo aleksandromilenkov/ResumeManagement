@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ICompany } from "../../types/globalTypes";
+import "./companies.scss"
 type Props = {
   companies: ICompany[];
 };
