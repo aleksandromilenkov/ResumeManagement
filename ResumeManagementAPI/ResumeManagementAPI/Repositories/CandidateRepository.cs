@@ -89,7 +89,7 @@ namespace ResumeManagementAPI.Repositories
         {
             try
             {
-                return await _context.Candidates.Include(c => c.Job).ThenInclude(j => j.Candidates).Include(c => c.Job).ThenInclude(j => j.Company).ToListAsync();
+                return await _context.Candidates.Include(c => c.Job).ThenInclude(j => j.Candidates).Include(c => c.Job).ThenInclude(j => j.Company).OrderBy(c=> c.CreatedAt).ToListAsync();
             }
             catch (Exception ex)
             {

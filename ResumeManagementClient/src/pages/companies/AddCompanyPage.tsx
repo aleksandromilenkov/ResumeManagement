@@ -3,7 +3,7 @@ import { companySize } from '../../types/globalEnums'
 import httpModule from '../../utils/axiosHelper';
 import { Button, InputLabel, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import {  createCompanyError, ICreateCompanyDTO } from '../../types/globalTypes';
+import {  createEntityError, ICreateCompanyDTO } from '../../types/globalTypes';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ const AddCompanyPage = (props: Props) => {
         isNaN(Number(value))
         );
     const [company, setCompany] = useState<ICreateCompanyDTO>({name:"", size: ""});
-    const [error, setError] = useState<createCompanyError | null>(null);
+    const [error, setError] = useState<createEntityError | null>(null);
     const [success, setSuccess] = useState("");
     const onChangeCompanyHandler = (e:any)=>{
         setError(null)

@@ -14,7 +14,7 @@ export interface ICreateCompanyDTO{
     size: string,
 };
 
-export type createCompanyError ={
+export type createEntityError ={
     property: string,
     message: string,
 }
@@ -31,3 +31,34 @@ export interface ICreateJobDTO{
     companyId: number,
     level: string
 };
+
+export interface ICandidate extends IBase{
+    firstName:string,
+    lastName: string,
+    email: string,
+    phone: string
+    coverLetter: string
+    resumeUrl: string
+    jobTitle: string
+    jobId:number
+}
+
+export interface ICreateCandidateDTO{
+    firstName:string,
+    lastName: string,
+    email: string,
+    phone: string
+    coverLetter: string
+    resumeUrl: File | null
+    jobId:number | null
+}
+/*
+ public string FirstName { get; set; }
+ public string LastName { get; set; }
+ public string Email { get; set; }
+ public string Phone { get; set; }
+ public string CoverLetter { get; set; }
+ public string ResumeUrl { get; set; }
+ public string JobTitle { get; set; }
+ public int JobId { get; set; }
+*/

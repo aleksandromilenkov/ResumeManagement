@@ -3,6 +3,8 @@ import { useTheme } from "./context/themeContext";
 import Navbar from "./components/Navbar/Navbar";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Spinner from "./utils/Spinner";
+import CandidatesPage from "./pages/candidates/CandidatesPage";
+import AddCandidatePage from "./pages/candidates/AddCandidatePage";
 
 // Imports with lazy loading
 const Home = lazy(()=> import("./pages/home/HomePage"));
@@ -29,6 +31,10 @@ function App() {
             <Route path="/jobs">
               <Route index element={<JobsPage/>}/>
               <Route path="add" element={<AddJobPage/>}/>
+            </Route>
+            <Route path="/candidates">
+              <Route index element={<CandidatesPage/>}/>
+              <Route path="add" element={<AddCandidatePage/>}/>
             </Route>
           </Routes>
         </Suspense>

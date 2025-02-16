@@ -3,12 +3,11 @@ import {  jobLevel } from '../../types/globalEnums'
 import httpModule from '../../utils/axiosHelper';
 import { Button, InputLabel, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import {  createCompanyError, ICompany, ICreateCompanyDTO, ICreateJobDTO } from '../../types/globalTypes';
+import {  createEntityError, ICompany, ICreateCompanyDTO, ICreateJobDTO } from '../../types/globalTypes';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import "./jobsPage.scss"
-import { Axios, AxiosError } from 'axios';
 import Spinner from '../../utils/Spinner';
 type Props = {}
 
@@ -20,7 +19,7 @@ const AddJobPage = (props: Props) => {
     const [job, setJob] = useState<ICreateJobDTO>({title:"", companyId: 0, level:""});
     const [companies, setCompanies] = useState<ICompany[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<createCompanyError | null>(null);
+    const [error, setError] = useState<createEntityError | null>(null);
     const [errorCompanies, setErrorCompanies] = useState<any>(null);
     const [success, setSuccess] = useState("");
     const onChangeJobTitleHandler = (e:any)=>{
@@ -28,9 +27,9 @@ const AddJobPage = (props: Props) => {
         setJob({...job, title: e.target.value})
     }
     const handleCreateJob = async()=>{
-        if(job.title.length <= 0 || job.title.length > 20){
+        if(job.title.length <= 0 || job.title.length > 50){
             setSuccess("");
-            setError({property: "title", message:"job title must be between 1 and 20 characters"});
+            setError({property: "title", message:"job title must be between 1 and 50 characters"});
             return;
         } 
         if(companies.every(c => c.id != job.companyId)){
@@ -83,7 +82,7 @@ const AddJobPage = (props: Props) => {
     }
   return (
     <div className='content'>
-        <div className="add-company">
+        <div className="add-job">
             <h2>Add New Job</h2>
             <TextField
                 autoComplete='off'

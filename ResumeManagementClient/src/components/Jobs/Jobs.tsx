@@ -8,7 +8,6 @@ type Props = {
 
 const Jobs = ({ jobs }: Props) => {
     const columns: GridColDef<(typeof rows)[number]>[] = [
-        { field: "id", headerName: "ID", width: 90 },
         {
           field: "title",
           headerName: "Job Title",
@@ -41,8 +40,8 @@ const Jobs = ({ jobs }: Props) => {
       ];
       const mappedJobs = jobs.map(job => {
         return {...job,
-             createdAt: new Date(job.createdAt).toLocaleString(),
-             updatedAt: new Date(job.updatedAt).toLocaleString(),
+             createdAt: new Date(job.createdAt).toLocaleDateString(),
+             updatedAt: new Date(job.updatedAt).toLocaleDateString(),
             }
       })
       const rows = [...mappedJobs];

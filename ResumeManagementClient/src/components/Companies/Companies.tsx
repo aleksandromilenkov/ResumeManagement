@@ -8,7 +8,6 @@ type Props = {
 
 const Companies = ({ companies }: Props) => {
     const columns: GridColDef<(typeof rows)[number]>[] = [
-        { field: "id", headerName: "ID", width: 90 },
         {
           field: "name",
           headerName: "Name",
@@ -33,16 +32,11 @@ const Companies = ({ companies }: Props) => {
           headerName: "Updated At",
           width: 160,
         },
-        {
-          field: "isActive",
-          headerName: "Is Active",
-          width: 160,
-        },
       ];
       const mappedCompanies = companies.map(company => {
         return {...company,
-             createdAt: new Date(company.createdAt).toLocaleString(),
-             updatedAt: new Date(company.updatedAt).toLocaleString(),
+             createdAt: new Date(company.createdAt).toLocaleDateString(),
+             updatedAt: new Date(company.updatedAt).toLocaleDateString(),
             }
       })
       const rows = [...mappedCompanies];
