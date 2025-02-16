@@ -1,10 +1,12 @@
-export interface ICompany{
+export interface IBase{
     id: number,
-    name: string,
-    size: string,
     createdAt:string,
     updatedAt:string,
     isActive:boolean,
+}
+export interface ICompany extends IBase{
+    name: string,
+    size: string,
 };
 
 export interface ICreateCompanyDTO{
@@ -16,3 +18,16 @@ export type createCompanyError ={
     property: string,
     message: string,
 }
+
+export interface IJob extends IBase{
+    title:string,
+    companyId: string,
+    companyName: string,
+    level: string
+}
+
+export interface ICreateJobDTO{
+    title: string,
+    companyId: number,
+    level: string
+};

@@ -3,3 +3,13 @@ export enum companySize {
     Medium,
     Large,
 }
+
+export enum jobLevel {
+    Associate,
+    Junior,
+    Mid,
+    Senior,
+    Lead,
+    Principle,
+    SeniorPrinciple
+}
