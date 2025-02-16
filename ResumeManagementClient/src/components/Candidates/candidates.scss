@@ -1,4 +1,12 @@
 .candidates-grid{
     color: var(--text-color1);
     width: 100%;
+    *{
+        color: var(--text-color1);
+    }
+    .MuiDataGrid-container--top{
+        *{
+            background-color:   var(--bg-color);
+        }
+    }
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ICompany, IJob } from "../../types/globalTypes";
+import { IJob } from "../../types/globalTypes";
+import "./jobs.scss"
 type Props = {
   jobs: IJob[];
 };
